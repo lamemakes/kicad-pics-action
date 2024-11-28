@@ -1,0 +1,37 @@
+name: 'KiCad Picture Generator'
+description: 'Generate photos of the schematic, PCB layout, and the 3D rendering of the PCB'
+inputs:
+  project-path:
+    description: 'The path to the KiCad project'
+    required: true
+    default: './'
+  project-name:
+    description: 'Name of the KiCad project (the string before .kicad_pro/.kicad_sch/.kicad_pcb)'
+    required: true
+  output-path:
+    description: 'The path where the generated photos will be output'
+    required: true
+outputs:
+  random-number:
+    description: "Random number"
+    value: ${{ steps.random-number-generator.outputs.random-number }}
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: |
+        sudo add-apt-repository --yes ppa:kicad/kicad-7.0-releases
+        sudo apt update --yes
+        sudo apt install --install-recommends --yes kicad
+    - name: Generate the schematic image
+      run: kicad-cli sch export svg ${inputs.project-path}${inputs.project-name}.kicad_sch -o "${inputs.output-path}${project-name}-schematic.svg"
+    - name: Generate the PCB image
+      run: kicad-cli pcb export svg ${inputs.project-path}${inputs.project-name}.kicad_pcb -l "F.Cu,B.Cu,F.Silkscreen,B.Silkscreen,Edge.Cuts" -o "${inputs.output-path}${inputs.project-name}-pcb.svg"
+    - name: Push changes
+      uses: EndBug/add-and-commit@v9
+      with:
+        committer_name: GitHub Actions
+        committer_email: actions@github.com
+        add: .
+        message: 'Update KiCad Image'
