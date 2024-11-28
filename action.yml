@@ -23,10 +23,20 @@ runs:
         sudo apt install --install-recommends --yes kicad
     - name: Generate the schematic image
       shell: bash
-      run: kicad-cli sch export svg ${inputs.project-path}${inputs.project-name}.kicad_sch -o "${inputs.output-path}${project-name}-schematic.svg"
+      run: kicad-cli sch export svg $PROJECT_PATH$PROJECT_NAME.kicad_sch -o "$OUTPUT_PATH$PROJECT_NAME-schematic.svg"
+      env:
+        PROJECT_PATH: ${{ inputs.project-path }}
+        PROJECT_NAME: ${{ inputs.project-name }}
+        OUTPUT_PATH: ${{ inputs.output-path }}
+
     - name: Generate the PCB image
       shell: bash
-      run: kicad-cli pcb export svg ${inputs.project-path}${inputs.project-name}.kicad_pcb -l "F.Cu,B.Cu,F.Silkscreen,B.Silkscreen,Edge.Cuts" -o "${inputs.output-path}${inputs.project-name}-pcb.svg"
+      run: kicad-cli pcb export svg $PROJECT_PATH$PROJECT_NAME.kicad_pcb -l "F.Cu,B.Cu,F.Silkscreen,B.Silkscreen,Edge.Cuts" -o "$OUTPUT_PATH$PROJECT_NAME-pcb.svg"
+      env:
+        PROJECT_PATH: ${{ inputs.project-path }}
+        PROJECT_NAME: ${{ inputs.project-name }}
+        OUTPUT_PATH: ${{ inputs.output-path }}
+
     - name: Push changes
       uses: EndBug/add-and-commit@v9
       with:
