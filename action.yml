@@ -18,7 +18,7 @@ runs:
     - name: Install dependencies
       shell: bash
       run: |
-        sudo add-apt-repository --yes ppa:kicad/kicad-7.0-releases
+        sudo add-apt-repository --yes ppa:kicad/kicad-8.0-releases
         sudo apt update --yes
         sudo apt install --install-recommends --yes kicad
     - name: Generate the schematic image
