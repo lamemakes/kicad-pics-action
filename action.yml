@@ -23,7 +23,7 @@ runs:
         sudo apt install --install-recommends --yes kicad
     - name: Generate the schematic image
       shell: bash
-      run: echo "$PROJECT_PATH$PROJECT_NAME.kicad_sch" && ls "$PROJECT_PATH$PROJECT_NAME.kicad_sch" && kicad-cli sch export svg $PROJECT_PATH$PROJECT_NAME.kicad_sch -o "$OUTPUT_PATH$PROJECT_NAME-schematic.svg"
+      run: kicad-cli sch export svg $PROJECT_PATH$PROJECT_NAME.kicad_sch -o "$OUTPUT_PATH"
       env:
         PROJECT_PATH: ${{ inputs.project-path }}
         PROJECT_NAME: ${{ inputs.project-name }}
